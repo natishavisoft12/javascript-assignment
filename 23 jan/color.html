@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Color Elements</title>
+    <style>
+        button {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        input {
+            margin: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Interactive Color Elements</h2>
+
+    <div id="controls">
+        <input type="text" id="colorInput" placeholder="Enter a color">
+        <button id="storeColorBtn">Store Color</button>
+        <button id="showColorsBtn">Show Stored Colors</button>
+    </div>
+    
+    <div id="colorButtons"></div>
+
+    <script src="color.js"></script>
+</body>
+</html>
