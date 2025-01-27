@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Slides Navigation</title>
+  <style>
+    /* Basic styling for the slider and slides */
+    #slider {
+      width: 100%;
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      display: none; /* Hide all slides by default */
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .active {
+      display: block; /* Show active slide */
+      opacity: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+    }
+
+    .controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .button {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="slider"></div>
+  <div class="controls">
+    <div class="button" id="prevBtn">Previous</div>
+    <div class="button" id="nextBtn">Next</div>
+  </div>
+
+  <script>
+    // JSON data for the slides
+    const slidesData = [
+      {
+        "title": "Slide 1",
+        "content": "This is the content of the first slide.",
+        "image": "https://via.placeholder.com/800x400?text=Slide+1"
+      },
+      {
+        "title": "Slide 2",
+        "content": "This is the content of the second slide.",
+        "image": "https://via.placeholder.com/800x400?text=Slide+2"
+      },
+      {
+        "title": "Slide 3",
+        "content": "This is the content of the third slide.",
+        "image": "https://via.placeholder.com/800x400?text=Slide+3"
+      }
+    ];
+
+    // Select the main slider container
+    const slider = document.getElementById('slider');
+
+    // Function that runs once the DOM content is loaded
+    function adder() {
+      slidesData.map((slide, index) => {
+        // Create a new slide div
+        const slideElement = document.createElement('div');
+        slideElement.classList.add('slide');
+        
+        // Add content to the slide
+        const slideContent = `
+          <h2>${slide.title}</h2>
+          <p>${slide.content}</p>
+          <img src="${slide.image}" alt="${slide.title}">
+        `;
+        slideElement.innerHTML = slideContent;
+
+        // Add the slide to the slider
+        slider.appendChild(slideElement);
+
+        // If it's the first item in the data, add the active class
+        if (index === 0) {
+          slideElement.classList.add('active');
+        }
+      });
+    }
+
+    // Function to move slides
+    function mover(direction) {
+      const currentSlide = document.querySelector('.slide.active');
+      let newSlide;
+
+      // Get the next or previous sibling element
+      if (direction === 'next') {
+        newSlide = currentSlide.nextElementSibling || slider.firstElementChild;
+      } else if (direction === 'prev') {
+        newSlide = currentSlide.previousElementSibling || slider.lastElementChild;
+      }
+
+      // Remove active class from the current slide and add to the new slide
+      currentSlide.classList.remove('active');
+      newSlide.classList.add('active');
+    }
+
+    // Add event listeners to buttons
+    document.getElementById('nextBtn').addEventListener('click', () => mover('next'));
+    document.getElementById('prevBtn').addEventListener('click', () => mover('prev'));
+
+    // Invoke the adder function when the DOM content is loaded
+    document.addEventListener('DOMContentLoaded', adder);
+  </script>
+  
+</body>
+</html>
+<!-- 1. Using JSON data, load the json file when the DOM content is loaded. Create
+the page slides dynamically with JavaScript code. Add interaction to
+navigate between slides listening for clicks on the buttons.
+JSON slides navigate slides with JavaScript Exercise :
+1. Select the main slider element as a variable named slider in
+JavaScript.
+2. Create a function that gets invoked once the DOM content loads. Give
+the function a name of adder()
+3. Within adder() create the slides, using the data from the JSON file
+apply the text title, html content, and styling to the slide elements.
+Add them to the page.
+4. If it's the first item in the data then add the class of active to the first
+one only
+5. Add an event listener to the buttons, when clicked check if it contains
+the next class, create a function named mover() to handle the result
+6. Get the current element with the active class. Using traversing, get
+the next sibling to the current element, if no next element exists then
+select the first child of the parent slider element.
+7. Get the previous element, if it's null then select the last child of the
+parent slider.
+8. Remove the active class for the current element, add the active class
+to the new element either previous or next.
+ -->

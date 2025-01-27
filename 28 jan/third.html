@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collision Detection and Movement</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #gameContainer {
+      position: relative;
+      width: 800px;
+      height: 600px;
+      background-color: #f0f0f0;
+      margin: 50px auto;
+      border: 1px solid #000;
+    }
+    .box {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+    }
+    .output {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+<div id="gameContainer">
+  <div id="box1" class="box" style="left: 100px; top: 100px;"></div>
+  <div id="box2" class="box" style="left: 200px; top: 100px;"></div>
+</div>
+
+<div class="output">
+  <p>Box 1 Position: <span id="box1Position">x: 100, y: 100</span></p>
+  <p>Box 2 Position: <span id="box2Position">x: 200, y: 100</span></p>
+</div>
+
+<script>
+  // 1. Create adder() function to add elements dynamically
+  function adder(tag, parent, content, className) {
+    const element = document.createElement(tag);
+    element.classList.add(className);
+    element.innerHTML = content;
+    parent.appendChild(element);
+  }
+
+  // 2. Create game objects
+  const game = {
+    box1: { x: 100, y: 100, width: 50, height: 50 },
+    box2: { x: 200, y: 100, width: 50, height: 50 },
+    container: document.getElementById('gameContainer'),
+    box1Element: document.getElementById('box1'),
+    box2Element: document.getElementById('box2'),
+  };
+
+  // 3. Track the keys for movement
+  const keyz = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false,
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+  };
+
+  // 4. Event listeners for keydown and keyup
+  document.addEventListener('keydown', (e) => {
+    if (keyz.hasOwnProperty(e.key)) {
+      keyz[e.key] = true;
+    }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    if (keyz.hasOwnProperty(e.key)) {
+      keyz[e.key] = false;
+    }
+  });
+
+  // 5. mover() function to move elements
+  function mover() {
+    // Handle movement for box1
+    if (keyz.ArrowUp && game.box1.y > 0) game.box1.y -= 5;
+    if (keyz.ArrowDown && game.box1.y + game.box1.height < game.container.clientHeight) game.box1.y += 5;
+    if (keyz.ArrowLeft && game.box1.x > 0) game.box1.x -= 5;
+    if (keyz.ArrowRight && game.box1.x + game.box1.width < game.container.clientWidth) game.box1.x += 5;
+
+    // Handle movement for box2
+    if (keyz.w && game.box2.y > 0) game.box2.y -= 5;
+    if (keyz.s && game.box2.y + game.box2.height < game.container.clientHeight) game.box2.y += 5;
+    if (keyz.a && game.box2.x > 0) game.box2.x -= 5;
+    if (keyz.d && game.box2.x + game.box2.width < game.container.clientWidth) game.box2.x += 5;
+
+    // Update box1 and box2 CSS positions
+    game.box1Element.style.left = game.box1.x + 'px';
+    game.box1Element.style.top = game.box1.y + 'px';
+    game.box2Element.style.left = game.box2.x + 'px';
+    game.box2Element.style.top = game.box2.y + 'px';
+
+    // Output the positions and dimensions
+    document.getElementById('box1Position').innerText = `x: ${game.box1.x}, y: ${game.box1.y}, w: ${game.box1.width}, h: ${game.box1.height}`;
+    document.getElementById('box2Position').innerText = `x: ${game.box2.x}, y: ${game.box2.y}, w: ${game.box2.width}, h: ${game.box2.height}`;
+
+    // Collision detection
+    checkCollision();
+  }
+
+  // 6. Collision detection function
+  function checkCollision() {
+    const b1 = game.box1;
+    const b2 = game.box2;
+
+    if (
+      b1.x < b2.x + b2.width &&
+      b1.x + b1.width > b2.x &&
+      b1.y < b2.y + b2.height &&
+      b1.y + b1.height > b2.y
+    ) {
+      alert('Collision detected!');
+    }
+  }
+
+  // 7. Animation loop to update movement
+  function gameLoop() {
+    mover();
+    requestAnimationFrame(gameLoop); // Keeps the animation running
+  }
+
+  // Start the game loop
+  gameLoop();
+</script>
+
+</body>
+</html>
+<!--  Fetch can be used to connect to external files, like JSON and return the
+results of those data files into JavaScript code. The data needs time to load,
+that is why promises are used to handle the data once it's ready and
+returned from the endpoint. Using async and await in the function can set
+up the promise to wait until a response is returned. Fetch can do the same
+with the chaining of then promises to handle the data once its arrived. You
+can also use promiseAll if there are multiple files that need to load data into
+one object. Once all the data is ready then the file contents can be used in
+the code and output on the page.
+AJAX request example code exercise :
+1. Create 3 page buttons to make requests. Set up an element on the
+page to show the output of the results.
+2. Using the first button on click, connect to a json file and return the
+contents back using fetch. Output the results of the file onto the web
+page.
+3. The second button uses async on the main request function, and await
+to move to the next function once the request completes. Output the
+results of the file data into the web page.
+4. Create an array of the paths to several JSON files, with the same
+object structure in each file.
+5. Once the third button is pressed, use Promise.all to make fetch
+requests to each JSON file. Nest the map function within the
+Promise.all request, so that the code can iterate through each JSON
+file. Once all the requests are completed then output the content into
+the web page from the JSON files. -->

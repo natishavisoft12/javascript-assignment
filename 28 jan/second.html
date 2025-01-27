@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJAX Requests with Fetch, Async/Await, and Promise.all</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background-color: #f4f4f4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>AJAX Request Example</h1>
+  
+  <!-- Buttons to make AJAX requests -->
+  <button id="button1">Load JSON with fetch</button>
+  <button id="button2">Load JSON with async/await</button>
+  <button id="button3">Load Multiple JSON files with Promise.all</button>
+
+  <!-- Area to display output -->
+  <div id="output"></div>
+
+  <script>
+    // Output element where results will be shown
+    const output = document.getElementById('output');
+
+    // Display function to show data in the output area
+    function displayOutput(data) {
+      output.innerHTML = JSON.stringify(data, null, 2);
+    }
+
+    // 1. Button 1: Load JSON with fetch
+    document.getElementById('button1').addEventListener('click', () => {
+      fetchDataWithFetch();
+    });
+
+    function fetchDataWithFetch() {
+      fetch({
+  "id": 1,
+  "name": "Alice",
+  "email": "alice@example.com",
+  "phone": "+1234567890",
+  "address": {
+    "street": "123 Main St",
+    "city": "Wonderland",
+    "zipcode": "12345"
+  },
+  "website": "https://alice.example.com"
+}
+)  // Fetching the data from data.json
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayOutput(data);
+        })
+        .catch(error => {
+          output.innerHTML = `Fetch error: ${error.message}`;
+        });
+    }
+
+    // 2. Button 2: Load JSON with async/await
+    document.getElementById('button2').addEventListener('click', async () => {
+      await fetchDataWithAsync();
+    });
+
+    async function fetchDataWithAsync() {
+      try {
+        const response = await fetch('data.json');  // Fetching the data from data.json
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        displayOutput(data);
+      } catch (error) {
+        output.innerHTML = `Async error: ${error.message}`;
+      }
+    }
+
+    // 3. Button 3: Load multiple JSON files with Promise.all
+    document.getElementById('button3').addEventListener('click', () => {
+      loadMultipleJsonFiles();
+    });
+
+    function loadMultipleJsonFiles() {
+      const jsonFiles = ['data.json', 'data.json', 'data.json'];  // Same JSON file used multiple times as an example
+
+      // Use Promise.all to fetch multiple JSON files
+      Promise.all(jsonFiles.map(file => fetch(file).then(response => response.json())))
+        .then(data => {
+          displayOutput(data);  // Display the array of data from all the JSON files
+        })
+        .catch(error => {
+          output.innerHTML = `Promise.all error: ${error.message}`;
+        });
+    }
+  </script>
+
+</body>
+</html>
+<!--  Fetch can be used to connect to external files, like JSON and return the
+results of those data files into JavaScript code. The data needs time to load,
+that is why promises are used to handle the data once it's ready and
+returned from the endpoint. Using async and await in the function can set
+up the promise to wait until a response is returned. Fetch can do the same
+with the chaining of then promises to handle the data once its arrived. You
+can also use promiseAll if there are multiple files that need to load data into
+one object. Once all the data is ready then the file contents can be used in
+the code and output on the page.
+AJAX request example code exercise :
+1. Create 3 page buttons to make requests. Set up an element on the
+page to show the output of the results.
+2. Using the first button on click, connect to a json file and return the
+contents back using fetch. Output the results of the file onto the web
+page.
+3. The second button uses async on the main request function, and await
+to move to the next function once the request completes. Output the
+results of the file data into the web page.
+4. Create an array of the paths to several JSON files, with the same
+object structure in each file.
+5. Once the third button is pressed, use Promise.all to make fetch
+requests to each JSON file. Nest the map function within the
+Promise.all request, so that the code can iterate through each JSON
+file. Once all the requests are completed then output the content into
+the web page from the JSON files. -->
