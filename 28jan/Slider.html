@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #slider {
+  display: flex;
+  overflow: hidden;
+  width: 300px;
+  height: 200px;
+  position: relative;
+}
+
+.slide {
+  flex: 0 0 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slide.active {
+  display: flex;
+}
+
+button {
+  margin: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <div id="slider"></div>
+<button id="prev">Previous</button>
+<button id="next">Next</button>
+<script src="Slider.js"></script>
+</body>
+</html>
